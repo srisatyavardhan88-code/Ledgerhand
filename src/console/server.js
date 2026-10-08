@@ -62,7 +62,7 @@ app.post('/api/reset', async (req, res) => {
   res.json({ ok: true });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, '127.0.0.1', () => {
   console.log(`Ledgerhand console  http://localhost:${PORT}`);
   console.log(`Northwind Ledger ERP ${world.erp.url}  (user lena.hart / northwind-demo)`);
   console.log(llmEnabled() ? 'Claude: on (ANTHROPIC_API_KEY set)' : 'Claude: off — using the built-in interpreter');

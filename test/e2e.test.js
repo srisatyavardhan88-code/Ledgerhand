@@ -60,4 +60,6 @@ test('dry run changes nothing in the ERP', { timeout: 180000 }, async () => {
   const { erp, run } = await runWith("Just check the AP inbox against the ERP. Don't post anything.");
   assert.equal(run.status, 'completed');
   assert.equal(erp.invoices.length, 0);
+  const decisions = run.events.filter((e) => e.type === 'decision').map((e) => [e.caseId, e.decision.action]);
+  assert.deepEqual(Object.fromEntries(decisions)['Acme_INV-88412_RESEND'], 'skip_duplicate', 'the resent copy is caught even though nothing was posted');
 });
