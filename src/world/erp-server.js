@@ -36,7 +36,7 @@ export function createErp({ sessionRequestLimit = 40, slowMs = 400, freezeNotice
   const money = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
-  function nextFriday(from = new Date('2026-10-08T00:00:00Z')) {
+  function nextFriday(from = new Date()) {
     const d = new Date(from);
     d.setUTCDate(d.getUTCDate() + ((5 - d.getUTCDay() + 7) % 7 || 7));
     return d.toISOString().slice(0, 10);
@@ -105,9 +105,6 @@ button.secondary{background:#fff;color:#24374d;border-color:#9aa6b2}
   });
   app.get('/logout', (req, res) => { res.setHeader('Set-Cookie', 'nl_sid=; Path=/; Max-Age=0'); res.redirect('/login'); });
 
-  // ---- admin hooks for tests and the console's "reset world" button ------------------------
-  app.post('/__admin/reset', (req, res) => { reset(); res.json({ ok: true }); });
-  app.get('/__admin/state', (req, res) => res.json({ invoices: db.invoices, audit: db.audit }));
 
   // ---- pages ------------------------------------------------------------------------------
   app.get('/', auth, (req, res) => {
@@ -238,7 +235,7 @@ ${i.status === 'Posted' ? `<form method="post" action="/invoices/${i.ref}/schedu
 export function startErp(port = Number(process.env.ERP_PORT || 4100), opts) {
   const erp = createErp(opts);
   return new Promise((resolve) => {
-    const server = erp.app.listen(port, () => resolve({ ...erp, server, url: `http://localhost:${server.address().port}` }));
+    const server = erp.app.listen(port, '127.0.0.1', () => resolve({ ...erp, server, url: `http://127.0.0.1:${server.address().port}` }));
   });
 }
 

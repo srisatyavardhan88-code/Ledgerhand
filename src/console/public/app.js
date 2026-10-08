@@ -212,7 +212,7 @@ $('#asks').addEventListener('click', async (e) => {
   const card = b.closest('.ask-card');
   card.querySelectorAll('button').forEach((x) => (x.disabled = true));
   const r = state.asks.get(card.dataset.id);
-  const by = r?.kind === 'approval' && r.approver !== 'You' ? `${r.approver} (via console)` : 'You (console)';
+  const by = r?.kind === 'approval' && r.approver !== 'You' ? `console user, for ${r.approver}` : 'You (console)';
   await fetch(`/api/runs/${runId}/answer`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ requestId: card.dataset.id, decision: b.dataset.v, by }) });
 });
 

@@ -267,8 +267,12 @@ export class Operator {
       const c = this.cases.get(t.caseId);
       const r = await this.erp.searchRegister(c.fields.number);
       const dups = r.rows.filter((row) => row.Supplier === c.fields.supplier);
+      // The same invoice can also sit in the inbox twice. The ERP only catches that once the
+      // first copy is posted, so a dry run (or a held first copy) needs this check as well.
+      const twin = [...this.cases.values()].find((o) => o !== c && o.fields && o.outcome !== 'out_of_scope' && o.decision && o.fields.supplier === c.fields.supplier && o.fields.number.toLowerCase() === c.fields.number.toLowerCase());
+      if (!dups.length && twin) dups.push({ 'AP ref': `${twin.file} in this inbox`, Status: 'already being processed' });
       this.updateCase(c.id, { duplicates: dups, status: 'checking' });
-      return { observation: dups.length ? `Already in the ERP as ${dups.map((d) => `${d['AP ref']} (${d.Status})`).join(', ')}.` : `No existing record for ${c.fields.number}.`, shot: r.shot };
+      return { observation: dups.length ? `Already ${twin && !r.rows.length ? 'handled' : 'in the ERP'} as ${dups.map((d) => `${d['AP ref']} (${d.Status})`).join(', ')}.` : `No existing record for ${c.fields.number}.`, shot: r.shot };
     },
 
     async 'erp.supplier'(t) {
@@ -316,7 +320,7 @@ export class Operator {
       if (answer.decision === 'approve') {
         const ref = `APR-${String(Date.now()).slice(-6)}`;
         this.updateCase(c.id, { approval: { ref, by: answer.by, approver: approver.name } });
-        return { observation: `Approved by ${answer.by} (${approver.name}). Approval reference ${ref}.` };
+        return { observation: `Approved by ${answer.by}. Approval reference ${ref}.` };
       }
       this.updateCase(c.id, { approval: { rejected: true, by: answer.by } });
       // The plan changes: drop the posting steps, park the invoice on hold instead.
@@ -406,7 +410,7 @@ export class Operator {
           posted: (m) => m.length === 1 && m[0].Status === 'Posted',
           held: (m) => m.length === 1 && m[0].Status === 'On hold',
           blocked: (m) => m.length === 0,
-          duplicate: (m) => m.length === 1,
+          duplicate: (m) => m.length <= 1,
           reviewed: (m) => m.length === 0,
         }[c.outcome];
         const ok = expect ? expect(mine) : false;
@@ -440,7 +444,7 @@ export class Operator {
       })];
     }
     if (d.action === 'ask_human') return [T('human.decide', `Ask how to handle ${n}`)];
-    if (!this.goal.actions.post) { this.updateCase(c.id, { outcome: 'reviewed', status: 'done' }); return []; }
+    if (!this.goal.actions.post) { this.updateCase(c.id, { outcome: 'reviewed', status: 'done', outcomeNote: `Read-only run. Would ${DECISION_LABEL[d.action].toLowerCase()}${d.needsApproval ? ' after CFO approval' : ''}.` }); return []; }
     if (d.action === 'hold_dispute') {
       return [
         T('erp.hold', `Park ${n} on hold (quantity exception)`),

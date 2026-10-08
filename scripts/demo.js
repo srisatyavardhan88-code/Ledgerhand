@@ -24,7 +24,7 @@ run.on('event', (e) => {
       const r = e.request;
       console.log(`  ${C.warn}✋ ${r.title}${C.off} ${r.body || ''}`);
       const pick = r.kind === 'approval' ? (approve ? 'approve' : 'reject') : r.options.at(-1).value;
-      setTimeout(() => run.answer(r.id, pick, r.approver ? `${r.approver} (demo auto-answer)` : 'demo auto-answer'), 300);
+      setTimeout(() => run.answer(r.id, pick, 'demo auto-answer'), 300);
       return;
     }
     case 'verify': return e.rows.forEach((r) => console.log(`  ${r.ok ? C.ok + '✓' : C.bad + '✗'} ${r.invoice}: expected ${r.expected}, ERP has ${r.found}${C.off}`));

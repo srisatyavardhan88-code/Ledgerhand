@@ -16,7 +16,7 @@ export function threeWayMatch({ invoice, supplier, po, receipts, duplicates, pol
   const add = (name, ok, detail, severity = ok ? 'pass' : 'fail') => checks.push({ name, ok, detail, severity });
 
   add('Not already in the ERP register', duplicates.length === 0, duplicates.length ? `Already recorded as ${duplicates.map((d) => d['AP ref']).join(', ')}` : 'No existing record for this supplier invoice number');
-  if (duplicates.length) return finish('skip_duplicate', 'Duplicate of an invoice already in the ERP. Do not post it twice.');
+  if (duplicates.length) return finish('skip_duplicate', 'Duplicate of an invoice already in the ERP or earlier in this inbox. Do not post it twice.');
 
   const bankOk = normIban(invoice.iban) === normIban(supplier.bank);
   add('Remittance bank matches supplier master', bankOk, bankOk ? `IBAN …${normIban(supplier.bank).slice(-4)}` : `Invoice says …${normIban(invoice.iban).slice(-4)}, master says …${normIban(supplier.bank).slice(-4)}`);
