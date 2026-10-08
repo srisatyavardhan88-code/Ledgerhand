@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledgerhand · Operator Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="4" width="22" height="24" rx="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M10 11h12M10 16h12M10 21h7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="23" cy="22" r="4.5" fill="var(--accent)"/><path d="M21 22l1.4 1.4L25 20.8" stroke="#0b1210" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+    <div><b>Ledgerhand</b><span>autonomous AP operator · <em id="company">Northwind Trading Co.</em></span></div>
+  </div>
+  <div class="top-actions">
+    <span class="pill" id="llm-pill" title="Request interpreter">interpreter: built-in</span>
+    <a class="pill link" id="erp-link" target="_blank" rel="noopener">Open ERP ↗</a>
+    <button class="ghost" id="reset-btn" title="Reset ERP, regenerate inbox">Reset world</button>
+  </div>
+</header>
+
+<main>
+  <section class="composer">
+    <div class="composer-copy">
+      <h1>Tell it the outcome. <i>It does the work.</i></h1>
+      <p>Ledgerhand reads the AP inbox, works <b>Northwind Ledger</b> through a real browser, follows the company's AP procedure, stops for approval when it should, and proves every result by reading it back.</p>
+    </div>
+    <form id="ask">
+      <textarea id="request" rows="2" placeholder="e.g. Clear this week's supplier invoices and get what checks out into Friday's payment run"></textarea>
+      <div class="ask-row">
+        <div class="chips" id="presets"></div>
+        <button type="submit" id="go">Run <span>⏎</span></button>
+      </div>
+    </form>
+    <div class="context-strip" id="context-strip"></div>
+  </section>
+
+  <section class="stage" id="stage" hidden>
+    <aside class="col left">
+      <div class="panel loop">
+        <h2>Loop</h2>
+        <ol id="phases"></ol>
+        <p class="phase-detail" id="phase-detail"></p>
+      </div>
+      <div class="panel goal" id="goal-panel">
+        <h2>Goal, as understood</h2>
+        <div id="goal"></div>
+      </div>
+      <div class="panel memory">
+        <h2>Memory <small>learned across runs</small></h2>
+        <div id="memory"></div>
+      </div>
+    </aside>
+
+    <section class="col center">
+      <div id="result"></div>
+      <div id="asks"></div>
+      <div class="panel">
+        <h2>Invoices <small id="case-count"></small></h2>
+        <div id="cases" class="cases"></div>
+      </div>
+      <div class="panel">
+        <h2>Plan <small>live · grows as it learns</small></h2>
+        <ol id="plan" class="plan"></ol>
+      </div>
+    </section>
+
+    <aside class="col right">
+      <div class="panel browser">
+        <h2>Live browser <small id="shot-count"></small></h2>
+        <div class="window">
+          <div class="chrome"><i></i><i></i><i></i><span id="shot-url">about:blank</span></div>
+          <img id="shot" alt="Latest browser screenshot">
+          <p id="shot-label"></p>
+        </div>
+        <div class="film" id="film"></div>
+      </div>
+      <div class="panel feed">
+        <h2>Narration</h2>
+        <ol id="feed"></ol>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<dialog id="lightbox"><img alt=""><form method="dialog"><button>Close</button></form></dialog>
+<script src="app.js" type="module"></script>
+</body>
+</html>

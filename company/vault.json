@@ -1,0 +1,4 @@
+{
+  "_note": "Demo service account for the bundled mock ERP. Not a real secret.",
+  "erp.operator": { "username": "ledgerhand.svc", "password": "northwind-demo" }
+}

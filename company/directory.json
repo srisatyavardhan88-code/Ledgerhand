@@ -1,0 +1,12 @@
+{
+  "people": [
+    { "id": "priya.raman", "name": "Priya Raman", "title": "CFO", "role": "ap_approver" },
+    { "id": "dev.okafor", "name": "Dev Okafor", "title": "Head of Security", "role": "fraud_escalation" },
+    { "id": "lena.hart", "name": "Lena Hart", "title": "AP Lead", "role": "ap_owner" }
+  ],
+  "systems": {
+    "erp": { "name": "Northwind Ledger", "url": "http://localhost:4100", "credentialRef": "erp.operator" },
+    "inbox": { "path": "var/inbox" },
+    "outbox": { "path": "var/outbox" }
+  }
+}

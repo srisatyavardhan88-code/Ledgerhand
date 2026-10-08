@@ -1,0 +1,21 @@
+{
+  "company": "Northwind Trading Co.",
+  "currency": "USD",
+  "ap": {
+    "priceTolerancePct": 2.0,
+    "quantityTolerance": 0,
+    "approvalThreshold": 10000,
+    "approver": "priya.raman",
+    "bankMismatch": "block_and_escalate",
+    "duplicate": "skip_and_note",
+    "quantityMismatch": "hold_and_dispute",
+    "paymentRunWeekday": "Friday"
+  },
+  "permissions": {
+    "operator": {
+      "allowed": ["read_inbox", "read_erp", "post_invoice", "schedule_payment", "draft_email", "write_report"],
+      "requiresApproval": ["post_invoice_above_threshold", "schedule_payment_above_threshold"],
+      "forbidden": ["edit_vendor_bank_details", "send_email_externally", "delete_records"]
+    }
+  }
+}
