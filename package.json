@@ -1,0 +1,23 @@
+{
+  "name": "ledgerhand",
+  "version": "0.1.0",
+  "description": "An autonomous accounts-payable operator: reads invoices, works a real ERP through a browser, recovers, asks for approval, verifies, and returns evidence.",
+  "main": "src/console/server.js",
+  "scripts": {
+    "start": "node src/console/server.js",
+    "demo": "node scripts/demo.js",
+    "inbox": "node scripts/make-inbox.js",
+    "test": "node --test --test-concurrency=1 \"test/*.test.js\""
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.22.3",
+    "pdf-parse": "^1.1.1",
+    "playwright": "1.56.1"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  }
+}
